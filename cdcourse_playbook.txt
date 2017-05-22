@@ -1,0 +1,10 @@
+ - hosts: localhost
+   tasks:
+   - name: install git
+     yum: name=git state=latest
+     become: yes
+   - name: clone petclinic from github
+     git: 
+      repo: 'https://github.com/danihu/cdcourse.git' 
+      dest: /home/ec2-user/cdcourse
+
