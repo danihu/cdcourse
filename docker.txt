@@ -1,0 +1,13 @@
+ - hosts: localhost
+   tasks:
+   - name: install docker
+     yum: name=docker state=latest
+     become: yes
+   - name: add user ec2-user to group docker
+     user: name=ec2-user
+      groups=docker
+      append=yes
+     become: yes
+   - name: starting docker
+     service: name=docker state=started
+     become: yes
