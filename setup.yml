@@ -1,0 +1,34 @@
+- hosts: localhost
+  tasks:
+  - name: ensure git is at the latest version
+    yum: name=git state=latest
+    become: yes
+  - name: clone petclinic repo 
+    git: 
+      repo: "https://github.com/danihu/spring-petclinic.git"
+      dest: "/home/ec2-user/petclinic"
+  - name: clone cdcourse repo 
+    git: 
+      repo: "https://github.com/danihu/cdcourse.git"
+      dest: "/home/ec2-user/cdcourse"
+      update: no
+  - name: install docker
+    yum: name=docker state=latest
+    become: yes
+  - name: add group docker to ec2-user
+    user:
+      name: ec2-user
+      groups: docker
+      append: yes
+    become: yes
+  - name: start docker service
+    become: yes
+    service: name=docker state=started
+  - name: copy and extract maven
+    become: yes
+    unarchive:
+      src: http://www-us.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+      copy: no
+      dest: /home/ec2-user/maven
+      remote_src: True
+      creates: /home/ec2-user/maven
